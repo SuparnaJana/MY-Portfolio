@@ -1,0 +1,865 @@
+<!`DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suparna Jana — UI/UX & Graphic Designer</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              indigo: '#4F46E5',
+              coral: '#F43F5E',
+              charcoal: '#0F172A',
+              surface: '#1E293B',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Custom subtle animations and print rules */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-float {
+      animation: floatSlow 5s ease-in-out infinite;
+    }
+    .glass-nav {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; color: #000000 !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-indigo-600 selection:text-white">
+
+  <!-- Toast Notification Box (Replaces alert()) -->
+  <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 translate-y-4 opacity-0">
+    <div class="flex items-center gap-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700/50 dark:border-slate-200">
+      <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 dark:text-emerald-600 shrink-0"></i>
+      <span id="toast-message" class="text-sm font-medium">Action completed!</span>
+    </div>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="fixed top-0 inset-x-0 z-40 glass-nav bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/70 dark:border-slate-800/80 no-print">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#home" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-rose-500 flex items-center justify-center text-white font-display font-extrabold text-lg shadow-md group-hover:scale-105 transition-transform">
+          SJ
+        </div>
+        <div>
+          <span class="font-display font-bold text-lg tracking-tight block leading-none">Suparna Jana</span>
+          <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 tracking-wider uppercase">Design Portfolio</span>
+        </div>
+      </a>
+
+      <!-- Desktop Menu -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <a href="#about" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>
+        <a href="#works" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Selected Works</a>
+        <a href="#skills" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Skills & Tools</a>
+        <a href="#experience" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Experience</a>
+        <a href="#contact" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" aria-label="Toggle Dark Mode" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <i id="theme-icon-dark" data-lucide="moon" class="w-4 h-4 hidden"></i>
+          <i id="theme-icon-light" data-lucide="sun" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Hire Me CTA -->
+        <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm shadow-indigo-600/20 transition-all">
+          <span>Let's Talk</span>
+          <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" aria-label="Open Navigation Menu" class="md:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-2 pb-5 space-y-2">
+      <a href="#about" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">About</a>
+      <a href="#works" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Selected Works</a>
+      <a href="#skills" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Skills & Tools</a>
+      <a href="#experience" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Experience</a>
+      <a href="#contact" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-semibold text-indigo-600 dark:text-indigo-400">Contact Me</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="pt-28 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Subtle Decorative Background Glows -->
+    <div class="absolute -top-24 -right-24 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-48 -left-24 w-72 h-72 bg-rose-500/10 dark:bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <!-- Left Content -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/70 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Available for Graphic & UI/UX Design Roles
+        </div>
+
+        <h1 class="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.12]">
+          Crafting Bold <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-rose-500">Brand Visuals</span> & Intuitive Digital Experiences.
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+          Hi, I’m <strong class="font-semibold text-slate-900 dark:text-white">Suparna Jana</strong> — a <strong class="font-semibold text-slate-900 dark:text-white">UI/UX & Graphic Designer</strong> with <strong>1.5 years</strong> of hands-on experience creating visual brand assets, social media creatives, and user-centric interfaces. Backed by a B.Tech in IT and frontend fluency, I bridge aesthetic storytelling with clean execution.
+        </p>
+
+        <!-- Primary Action Buttons -->
+        <div class="flex flex-wrap items-center gap-3.5 pt-2 no-print">
+          <a href="#works" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-lg shadow-indigo-600/25 transition-all">
+            <span>Explore My Works</span>
+            <i data-lucide="layers" class="w-4 h-4"></i>
+          </a>
+          <button onclick="window.print()" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 font-semibold text-sm transition-all">
+            <i data-lucide="printer" class="w-4 h-4 text-rose-500"></i>
+            <span>Print / Save Resume</span>
+          </button>
+        </div>
+
+        <!-- Quick Location & Contact Strip -->
+        <div class="pt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          <span class="inline-flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-4 h-4 text-rose-500"></i>
+            Howrah, West Bengal, India
+          </span>
+          <a href="mailto:janasuparna1999@gmail.com" class="inline-flex items-center gap-1.5 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+            <i data-lucide="mail" class="w-4 h-4 text-indigo-500"></i>
+            janasuparna1999@gmail.com
+          </a>
+          <a href="tel:+918538016229" class="inline-flex items-center gap-1.5 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+            <i data-lucide="phone" class="w-4 h-4 text-emerald-500"></i>
+            +91-85380-16229
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Visual Card (Creative Designer Showcase Card) -->
+      <div class="lg:col-span-5">
+        <div class="relative bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xl animate-float">
+          <!-- Decorative Top Bar -->
+          <div class="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            </div>
+            <span class="text-xs font-mono text-slate-400">figma • photoshop • illustrator</span>
+          </div>
+
+          <!-- Designer Profile Snapshot -->
+          <div class="py-6 space-y-5">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-rose-500 flex items-center justify-center text-white font-display font-extrabold text-2xl shadow-md shrink-0">
+                SJ
+              </div>
+              <div>
+                <h2 class="font-display font-bold text-xl">Suparna Jana</h2>
+                <p class="text-sm text-indigo-600 dark:text-indigo-400 font-medium">UI/UX & Graphic Designer</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">B.Tech in Information Technology</p>
+              </div>
+            </div>
+
+            <!-- Key Metrics Grid -->
+            <div class="grid grid-cols-3 gap-3 pt-2">
+              <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 text-center">
+                <span class="block font-display font-extrabold text-xl text-indigo-600 dark:text-indigo-400">1.5+</span>
+                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Years Exp.</span>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 text-center">
+                <span class="block font-display font-extrabold text-xl text-rose-500">6+</span>
+                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Design Tools</span>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 text-center">
+                <span class="block font-display font-extrabold text-xl text-emerald-500">UI+Brand</span>
+                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Dual Focus</span>
+              </div>
+            </div>
+
+            <!-- Core Creative Pillars -->
+            <div class="space-y-2.5 pt-1">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-semibold text-slate-700 dark:text-slate-300">Brand Identity & Social Creatives</span>
+                <span class="text-indigo-600 dark:text-indigo-400 font-semibold">Photoshop / Illustrator</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-indigo-600 to-rose-500 rounded-full" style="width: 95%"></div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs pt-1">
+                <span class="font-semibold text-slate-700 dark:text-slate-300">Wireframing & Responsive Web UI</span>
+                <span class="text-rose-500 font-semibold">Figma / Adobe XD</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-rose-500 to-amber-500 rounded-full" style="width: 92%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Summary Section -->
+  <section id="about" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900/50 border-y border-slate-200/70 dark:border-slate-800/70">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-4">
+        <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">About Me</span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-2 leading-tight">
+          Where Graphic Aesthetics Meet Technical Precision.
+        </h2>
+      </div>
+      <div class="lg:col-span-8 space-y-4 text-slate-600 dark:text-slate-300 text-base leading-relaxed">
+        <p>
+          I am a creative <strong>UI/UX & Graphic Designer</strong> with <strong>1.5 years of hands-on experience</strong> in designing intuitive digital interfaces, wireframes, and high-impact visual brand assets. Whether crafting scroll-stopping social media creatives, event posters, or clean brand identities, my goal is to communicate clearly through strong typography, color theory, and visual hierarchy.
+        </p>
+        <p>
+          Backed by a <strong>B.Tech in Information Technology</strong> and practical frontend knowledge in <strong>HTML, CSS, JavaScript, and React</strong>, I understand how designs translate into production—ensuring seamless collaboration with marketing teams, creative directors, and developers alike.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Selected Works / Graphic & UI Showcase -->
+  <section id="works" class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-rose-500">Portfolio Showcase</span>
+          <h2 class="font-display font-bold text-3xl sm:text-4xl mt-2">Selected Graphic & UI Works</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
+            A curated showcase of brand identity systems, social media campaigns, and responsive web interfaces. Click any project to inspect details.
+          </p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2 no-print" id="portfolio-filters">
+          <button data-filter="all" class="filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-600 text-white shadow-sm transition-all">
+            All Works
+          </button>
+          <button data-filter="brand" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition-all">
+            Brand & Print
+          </button>
+          <button data-filter="social" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition-all">
+            Social Media Creatives
+          </button>
+          <button data-filter="uiux" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition-all">
+            UI/UX & Web
+          </button>
+        </div>
+      </div>
+
+      <!-- Projects Grid -->
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <!-- Project cards are rendered dynamically via JavaScript for clean modal inspection -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Skills & Tools Section -->
+  <section id="skills" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900/50 border-y border-slate-200/70 dark:border-slate-800/70">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Capabilities</span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-2">Core Skills & Design Stack</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">
+          A versatile blend of visual communication, user-centered UI/UX methodology, industry-standard creative suites, and frontend development fundamentals.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- 1. Graphic Design -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-rose-500/50 transition-all">
+          <div class="flex items-center gap-3.5 mb-5">
+            <div class="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+              <i data-lucide="palette" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg">Graphic Design</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Visual Storytelling & Brand Assets</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Social Media Creatives</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Banners & Posters</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Brand Identity</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Typography</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Color Theory</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Visual Hierarchy</span>
+          </div>
+        </div>
+
+        <!-- 2. UI/UX Design -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-indigo-500/50 transition-all">
+          <div class="flex items-center gap-3.5 mb-5">
+            <div class="w-11 h-11 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <i data-lucide="layout-template" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg">UI/UX Design</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">User Flows & Digital Product Interfaces</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Wireframing</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Interactive Prototyping</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">User Flows</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Information Architecture</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Usability Testing</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Responsive Design</span>
+          </div>
+        </div>
+
+        <!-- 3. Design Tools -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-amber-500/50 transition-all">
+          <div class="flex items-center gap-3.5 mb-5">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <i data-lucide="pen-tool" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg">Design Tools</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Adobe Creative Cloud & Prototyping Suites</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Figma</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Adobe XD</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Adobe Photoshop</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Adobe Illustrator</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Canva</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Visual Studio Code</span>
+          </div>
+        </div>
+
+        <!-- 4. Frontend Basics -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-emerald-500/50 transition-all">
+          <div class="flex items-center gap-3.5 mb-5">
+            <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <i data-lucide="code-2" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-bold text-lg">Frontend Basics</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Developer-Friendly Implementation</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">HTML5</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">CSS3</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">JavaScript (ES6+)</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">React.js</span>
+            <span class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Tailwind CSS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience & Education Section -->
+  <section id="experience" class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <!-- Experience Column -->
+      <div class="lg:col-span-7 space-y-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Career Track</span>
+          <h2 class="font-display font-bold text-3xl mt-1">Work Experience</h2>
+        </div>
+
+        <div class="relative pl-6 sm:pl-8 border-l-2 border-indigo-600/30 space-y-6">
+          <div class="relative bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+            <!-- Timeline Dot -->
+            <span class="absolute -left-[33px] sm:-left-[41px] top-7 w-4 h-4 rounded-full bg-indigo-600 ring-4 ring-slate-50 dark:ring-slate-950"></span>
+
+            <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+              <div>
+                <h3 class="font-display font-bold text-xl text-slate-900 dark:text-white">
+                  UI/UX & Graphic Designer (Full-Time)
+                </h3>
+                <p class="text-xs font-semibold text-rose-500 mt-0.5">
+                  Previously Design Intern
+                </p>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800/70">
+                July 2025 – October 2026
+              </span>
+            </div>
+
+            <p class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              Hemraj Industries Pvt. Ltd. — Purba Bardhaman, West Bengal
+            </p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
+              Intern: Jul 2025 – Oct 2025 &bull; Full-Time Payroll: Nov 2025 – 31 Oct 2026
+            </p>
+
+            <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                <span>Transitioned from Intern to Full-Time role, leading responsive UI layouts and wireframes for <strong>5+ web pages</strong> to boost user engagement.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                <span>Created clean digital dashboards, presentation layouts, and visual reports using <strong>Google Workspace</strong> and <strong>Advanced Excel</strong>.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-1"></i>
+                <span>Developed <strong>brand-aligned graphic assets</strong>, marketing creatives, and collaborated with developers to refine UI based on user feedback.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education & Highlights Column -->
+      <div class="lg:col-span-5 space-y-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-rose-500">Academic Background</span>
+          <h2 class="font-display font-bold text-3xl mt-1">Education & Languages</h2>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-5">
+          <!-- B.Tech -->
+          <div class="flex items-start gap-3.5">
+            <div class="w-11 h-11 rounded-2xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="font-display font-bold text-base sm:text-lg">B.Tech in Information Technology</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">CGPA: 6.88 / 10</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5">
+                Seacom Engineering College (MAKAUT), Howrah
+              </p>
+              <p class="text-xs text-slate-400 mt-0.5">2022 – 2025</p>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-100 dark:border-slate-800"></div>
+
+          <!-- Diploma -->
+          <div class="flex items-start gap-3.5">
+            <div class="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="award" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="font-display font-bold text-base sm:text-lg">Diploma in Electrical Engineering</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">Score: 76%</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5">
+                Calcutta Institute of Technology (W.B.S.C.T.E.), Howrah
+              </p>
+              <p class="text-xs text-slate-400 mt-0.5">2016 – 2019</p>
+            </div>
+          </div>
+
+          <!-- Languages Strip -->
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Languages</span>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <span class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">Bengali <span class="text-slate-400">(Native)</span></span>
+              <span class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">Hindi <span class="text-slate-400">(Native / Bilingual)</span></span>
+              <span class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 font-medium">English <span class="text-slate-400">(Professional)</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Contact Form -->
+        <div class="lg:col-span-7 bg-slate-50 dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm no-print">
+          <form id="contact-form" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="sender-name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Your Name / Agency</label>
+                <input type="text" id="sender-name" required placeholder="e.g. Creative Studio HR" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+              </div>
+              <div>
+                <label for="sender-email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
+                <input type="email" id="sender-email" required placeholder="hr@agency.com" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+              </div>
+            </div>
+
+            <div>
+              <label for="project-role" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Opportunity Type</label>
+              <select id="project-role" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                <option value="Graphic Designer Role">Full-Time Graphic Designer Role</option>
+                <option value="UI/UX & Graphic Designer">UI/UX & Graphic Designer Role</option>
+                <option value="Freelance Brand / Social Campaign">Freelance Brand / Social Media Project</option>
+                <option value="Interview Invitation">Interview Invitation</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="sender-message" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Message</label>
+              <textarea id="sender-message" rows="4" required placeholder="Hello Suparna, we reviewed your portfolio and would love to discuss..." class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 transition-all flex items-center justify-center gap-2">
+              <span>Send Message via Email</span>
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-slate-200/70 dark:border-slate-800/80 text-center text-xs text-slate-500 dark:text-slate-400">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>&copy; <span id="year"></span> Suparna Jana. Designed with precision & visual passion.</p>
+      <p class="font-medium text-slate-600 dark:text-slate-300">UI/UX & Graphic Designer &bull; Howrah, West Bengal</p>
+    </div>
+  </footer>
+
+  <!-- Project Preview Modal -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div id="modal-banner" class="h-48 sm:h-56 w-full relative flex items-center justify-center p-6 text-white">
+        <button id="close-modal" aria-label="Close Modal" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div id="modal-visual-preview" class="text-center"></div>
+      </div>
+      <div class="p-6 sm:p-8 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span id="modal-category" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400"></span>
+          <span id="modal-tools" class="text-xs font-medium text-slate-500 dark:text-slate-400"></span>
+        </div>
+        <h3 id="modal-title" class="font-display font-bold text-2xl"></h3>
+        <p id="modal-desc" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Key Design Deliverables</h4>
+          <ul id="modal-deliverables" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-medium text-slate-700 dark:text-slate-300"></ul>
+        </div>
+        <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
+          <a id="modal-live-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition-colors">
+            <span>Visit Live Project</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+          <button id="modal-done-btn" class="ml-auto px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-semibold">
+            Close Preview
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide Icons & Current Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Curated Portfolio Showcase Data matching Suparna's exact CV projects
+    const projects = [
+      {
+        id: 1,
+        title: "Brand Identity & Digital Creatives Suite",
+        category: "brand",
+        categoryLabel: "Brand & Print",
+        tools: "Figma • Adobe Illustrator • Adobe Photoshop",
+        liveUrl: "",
+        gradient: "from-rose-500 via-pink-600 to-amber-500",
+        icon: "sparkles",
+        summary: "Designed cohesive social media campaigns, vector illustrations, promotional banners, and minimalist dashboard UI concepts—unifying brand color palettes, typography, and visual hierarchy.",
+        deliverables: [
+          "Cohesive Social Media Campaigns",
+          "Custom Vector Illustrations & Logos",
+          "Promotional Banners & Event Posters",
+          "Minimalist Dashboard UI Concepts"
+        ]
+      },
+      {
+        id: 2,
+        title: "Expensio — UI/UX & Full-Stack Finance SaaS",
+        category: "uiux",
+        categoryLabel: "UI/UX & Web",
+        tools: "Figma • Next.js • React • TypeScript • Tailwind CSS",
+        liveUrl: "https://expensio-xi.vercel.app",
+        gradient: "from-indigo-600 via-violet-600 to-sky-600",
+        icon: "layout",
+        summary: "Designed the end-to-end user experience, dashboard wireframes, and design system in Figma before frontend implementation. Built an accessible, responsive interface focused on clean visual hierarchy and smooth user flows.",
+        deliverables: [
+          "End-to-End UX & Dashboard Wireframes",
+          "Scalable Figma Design System",
+          "Accessible & Responsive Web Interface",
+          "Clean Visual Hierarchy & Smooth Flows"
+        ]
+      },
+      {
+        id: 3,
+        title: "Social Media Campaign & Promotional Visuals",
+        category: "social",
+        categoryLabel: "Social Media Creatives",
+        tools: "Adobe Photoshop • Adobe Illustrator • Canva",
+        liveUrl: "",
+        gradient: "from-fuchsia-600 via-rose-500 to-orange-500",
+        icon: "megaphone",
+        summary: "Scroll-stopping digital marketing creatives, carousel posts, and brand-aligned promotional banners crafted with strong typography, color theory, and product storytelling.",
+        deliverables: [
+          "Instagram & LinkedIn Carousel Sets",
+          "Brand-Aligned Marketing Creatives",
+          "Festival & Promotional Ad Banners",
+          "Typography & Visual Hierarchy Grids"
+        ]
+      },
+      {
+        id: 4,
+        title: "Corporate Web UI & Visual Dashboards (Hemraj Industries)",
+        category: "uiux",
+        categoryLabel: "UI/UX & Web",
+        tools: "Figma • Adobe XD • Google Workspace",
+        liveUrl: "",
+        gradient: "from-emerald-500 via-teal-600 to-cyan-700",
+        icon: "presentation",
+        summary: "Led responsive UI layouts and wireframes for 5+ web pages alongside clean digital dashboards, presentation layouts, and visual reports to elevate stakeholder clarity and user engagement.",
+        deliverables: [
+          "Responsive UI Layouts for 5+ Web Pages",
+          "Interactive Wireframes & User Flows",
+          "Clean Digital Dashboards & Reports",
+          "Developer Handoff & UI Refinement"
+        ]
+      }
+    ];
+
+    const projectsGrid = document.getElementById('projects-grid');
+
+    function renderProjects(filter = 'all') {
+      projectsGrid.innerHTML = '';
+      const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+
+      filtered.forEach(project => {
+        const card = document.createElement('article');
+        card.className = "group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col";
+        card.innerHTML = `
+          <div class="h-52 sm:h-60 bg-gradient-to-br ${project.gradient} p-6 relative flex flex-col justify-between text-white overflow-hidden">
+            <div class="flex items-center justify-between z-10">
+              <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/25 backdrop-blur-md">
+                ${project.categoryLabel}
+              </span>
+              <span class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i data-lucide="${project.icon}" class="w-4 h-4"></i>
+              </span>
+            </div>
+            <!-- Decorative Vector Frame Preview -->
+            <div class="my-auto mx-auto w-4/5 h-24 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/25 p-3.5 flex items-center justify-between transform group-hover:-translate-y-1 transition-transform">
+              <div class="space-y-1.5">
+                <div class="w-24 h-2.5 rounded-full bg-white/80"></div>
+                <div class="w-16 h-2 rounded-full bg-white/50"></div>
+              </div>
+              <div class="w-10 h-10 rounded-xl bg-white/25 flex items-center justify-center font-display font-bold text-xs">
+                UI/GD
+              </div>
+            </div>
+            <p class="text-[11px] font-medium text-white/90 z-10">${project.tools}</p>
+          </div>
+
+          <div class="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h3 class="font-display font-bold text-xl group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                ${project.title}
+              </h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+                ${project.summary}
+              </p>
+            </div>
+            <div class="pt-2 flex items-center justify-between border-t border-slate-100 dark:border-slate-800">
+              ${project.liveUrl ? `
+                <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:underline">
+                  <span>expensio-xi.vercel.app</span>
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
+              ` : `<span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Case Study & Deliverables</span>`}
+              <button onclick="openProjectModal(${project.id})" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                <span>View Details</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        projectsGrid.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Filter Buttons Logic
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-sm');
+          b.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-700', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-800');
+        });
+        btn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-sm');
+        btn.classList.remove('bg-white', 'dark:bg-slate-900', 'text-slate-700', 'dark:text-slate-300', 'border', 'border-slate-200', 'dark:border-slate-800');
+        renderProjects(btn.dataset.filter);
+      });
+    });
+
+    // Project Modal Controls
+    const modal = document.getElementById('project-modal');
+    function openProjectModal(id) {
+      const p = projects.find(item => item.id === id);
+      if (!p) return;
+
+      document.getElementById('modal-banner').className = `h-48 sm:h-56 w-full relative flex items-center justify-center p-6 text-white bg-gradient-to-br ${p.gradient}`;
+      document.getElementById('modal-visual-preview').innerHTML = `
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center mb-3">
+          <i data-lucide="${p.icon}" class="w-7 h-7"></i>
+        </div>
+        <p class="font-display font-bold text-lg">${p.categoryLabel} Showcase</p>
+      `;
+      document.getElementById('modal-category').textContent = p.categoryLabel;
+      document.getElementById('modal-tools').textContent = p.tools;
+      document.getElementById('modal-title').textContent = p.title;
+      document.getElementById('modal-desc').textContent = p.summary;
+
+      const list = document.getElementById('modal-deliverables');
+      list.innerHTML = p.deliverables.map(item => `
+        <li class="flex items-center gap-2">
+          <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i>
+          <span>${item}</span>
+        </li>
+      `).join('');
+
+      const liveLinkEl = document.getElementById('modal-live-link');
+      if (p.liveUrl) {
+        liveLinkEl.href = p.liveUrl;
+        liveLinkEl.classList.remove('hidden');
+        liveLinkEl.classList.add('inline-flex');
+      } else {
+        liveLinkEl.classList.add('hidden');
+        liveLinkEl.classList.remove('inline-flex');
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeProjectModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    document.getElementById('close-modal').addEventListener('click', closeProjectModal);
+    document.getElementById('modal-done-btn').addEventListener('click', closeProjectModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeProjectModal();
+    });
+
+    // Dark / Light Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlEl = document.documentElement;
+    const darkIcon = document.getElementById('theme-icon-dark');
+    const lightIcon = document.getElementById('theme-icon-light');
+
+    function updateThemeIcons() {
+      if (htmlEl.classList.contains('dark')) {
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+      } else {
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      }
+    }
+
+    // Default to clean light agency look with optional dark toggle
+    updateThemeIcons();
+    themeToggle.addEventListener('click', () => {
+      htmlEl.classList.toggle('dark');
+      updateThemeIcons();
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // Clipboard Copy Helper (Safe for iframes)
+    function copyText(text, successMsg) {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (err) {
+        showToast('Could not copy automatically.');
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    // Custom Toast Notification
+    function showToast(message) {
+      const toast = document.getElementById('toast-box');
+      document.getElementById('toast-message').textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-4', 'opacity-0');
+      }, 10);
+      setTimeout(() => {
+        toast.classList.add('translate-y-4', 'opacity-0');
+        setTimeout(() => toast.classList.add('hidden'), 300);
+      }, 3000);
+    }
+
+    // Contact Form Handler (Opens pre-filled mailto link + shows confirmation)
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('sender-name').value.trim();
+      const email = document.getElementById('sender-email').value.trim();
+      const role = document.getElementById('project-role').value;
+      const msg = document.getElementById('sender-message').value.trim();
+
+      const subject = encodeURIComponent(`Design Opportunity: ${role} — From ${name}`);
+      const body = encodeURIComponent(`Hello Suparna,\n\n${msg}\n\nBest regards,\n${name}\n(${email})`);
+      window.location.href = `mailto:janasuparna1999@gmail.com?subject=${subject}&body=${body}`;
+
+      showToast('Opening your email client to send message!');
+      this.reset();
+    });
+
+    // Initial Render
+    renderProjects('all');
+  </script>
+</body>
+</html>
